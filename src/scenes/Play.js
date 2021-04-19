@@ -6,11 +6,15 @@ class Play extends Phaser.Scene {
     preload() {
         //load images/tile sprites
         this.load.image('paperplane', './assets/paperplane.png');
-        this.load.image('spaceship', './assets/spaceship.png');
+        this.load.image('scissors', './assets/scissors.png');
+        this.load.image('rock', './assets/rock.png');
+        this.load.image('Red', './assets/Redplane.png');
+        this.load.image('Blue', './assets/Blueplane.png');
+        this.load.image('Yellow', './assets/Yellplane.png');
         this.load.image('faststar', './assets/faststarbg.png');
         this.load.image('skytwo', './assets/skytwo.png');
         //load spritesheet
-        this.load.spritesheet('explosion','./assets/explosion.png', {
+        this.load.spritesheet('explosion','./assets/shred.png', {
             frameWidth: 64,
             frameHeight: 32,
             startFrame: 0,
@@ -18,12 +22,9 @@ class Play extends Phaser.Scene {
         })
     } 
     create () {
-        //place waterfall
+        //place skysprite
         this.sky = this.add.tileSprite(0, 0, game.config.width, game.config.height,'skytwo').setOrigin(0,0);
 
-        //this.add.text(20,20, "Rocket Patrol Play");
-        //green UI background
-        //this.add.rectangle(0,borderUISize + borderPadding, game.config.width, borderUISize * 2, 0x00FF00).setOrigin(0,0);
         //white borders
         this.add.rectangle(0,0,game.config.width, borderUISize, 0xFFFFFF).setOrigin(0,0);
         this.add.rectangle(0, game.config.height - borderUISize, game.config.width, borderUISize, 0xFFFFFF).setOrigin(0,0);
@@ -34,18 +35,19 @@ class Play extends Phaser.Scene {
         this.p1Rocket = new Rocket(this, game.config.width/2,game.config.height - borderUISize - borderPadding, 'paperplane').setOrigin(0.5,0.5);
 
         //add 3 spaceships
-        this.ship01 = new Spaceship(this, game.config.width + borderUISize * 6, borderUISize * 4, 'spaceship', 0, 30).setOrigin(0,0);
-        this.ship02 = new Spaceship(this, game.config.width + borderUISize * 3, borderUISize * 5 + borderPadding * 2, 'spaceship', 0, 20).setOrigin(0,0);
-        this.ship03 = new Spaceship(this, game.config.width, borderUISize * 6 + borderPadding * 4, 'spaceship', 0, 10).setOrigin(0,0);
+        this.ship01 = new Spaceship(this, game.config.width + borderUISize * 6, borderUISize * 4, 'Red', 0, 30).setOrigin(0,0);
+        this.ship02 = new Spaceship(this, game.config.width + borderUISize * 3, borderUISize * 5 + borderPadding * 2, 'Blue', 0, 20).setOrigin(0,0);
+        this.ship03 = new Spaceship(this, game.config.width, borderUISize * 6 + borderPadding * 4, 'Yellow', 0, 10).setOrigin(0,0);
 
         this.fastship = new Fastship(this, borderUISize * 8, borderUISize * 5, 'faststar', 0, 50).setOrigin(0,0);
-        this.p1Weapon = new NewWeapon(this, game.config.width/2, game.config.height - borderUISize - borderPadding, 'paperplane').setOrigin(0.5,0.5);
-        //this.p1Weapon2 = new NewWeapon2(this, game.config.width/2, game.config.height - borderUISize - borderPadding, 'paperplane').setOrigin(4,0.5);
+        this.p1Weapon = new NewWeapon(this, game.config.width/2, game.config.height - borderUISize - borderPadding, 'scissors').setOrigin(0.5,0.5);
+        this.p1Weapon2 = new Rock(this, game.config.width/2, game.config.height - borderUISize - borderPadding, 'rock').setOrigin(0.5,0.5);
 
         //define keys
         keyF = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.F);
         keyR = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.R);
         keyE = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.E);
+        keyW = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.W);
         keyLEFT = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.LEFT);
         keyRIGHT = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.RIGHT);
 
@@ -131,7 +133,7 @@ class Play extends Phaser.Scene {
         //update Rocket and ships
         this.p1Rocket.update();
         this.p1Weapon.update();
-        //this.p1Weapon2.update();
+        this.p1Weapon2.update();
         this.ship01.update();
         this.ship02.update();
         this.ship03.update();
@@ -181,6 +183,27 @@ class Play extends Phaser.Scene {
             this.shipExplode(this.ship01);
             //console.log('kaboom ship 01');
         }
+        if(this.checkCollision(this.p1Weapon, this.fastship)) {
+            this.p1Weapon.reset();
+            this.shipExplode(this.fastship);
+            //console.log('kaboom newship');
+        }
+
+        if(this.checkCollision(this.p1Weapon2, this.ship03)) {
+            this.p1Weapon2.reset();
+            this.shipExplode(this.ship03);
+            //console.log('kaboom ship 03');
+        }
+        if(this.checkCollision(this.p1Weapon2, this.ship02)) {
+            this.p1Weapon2.reset();
+            this.shipExplode(this.ship02);
+            //console.log('kaboom ship 02');
+        }
+        if(this.checkCollision(this.p1Weapon2, this.ship01)) {
+            this.p1Weapon2.reset();
+            this.shipExplode(this.ship01);
+            //console.log('kaboom ship 01');
+        }
 
     }
 
@@ -195,6 +218,8 @@ class Play extends Phaser.Scene {
             } else {
                 return false;
             }
+        
+        
     }
     
     shipExplode(ship){

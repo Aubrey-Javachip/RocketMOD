@@ -8,6 +8,7 @@ class Menu extends Phaser.Scene {
         this.load.audio('sfx_select', './assets/scribble.wav');
         this.load.audio('sfx_explosion', './assets/crumple.wav');
         this.load.audio('sfx_rocket', './assets/breeze.ogg');
+        this.load.audio('theme','./assets/Theme.wav');
         this.load.image('sky', './assets/sky.png');
     }
     create () {
@@ -27,7 +28,7 @@ class Menu extends Phaser.Scene {
 
         this.add.image(0,0,'sky').setOrigin(0,0); 
         //menu text
-        this.add.text(game.config.width/2, game.config.height/2 - borderUISize - borderPadding, 'ROCKET PATROL', menuConfig).setOrigin(0.5);
+        this.add.text(game.config.width/2, game.config.height/2 - borderUISize - borderPadding, 'ROCK PAPER SCISSORS SHOOT!', menuConfig).setOrigin(0.5);
         this.add.text(game.config.width/2, game.config.height/2, 'Use ←→ arrows to move & (F) to fire', menuConfig).setOrigin(0.5);
         //menuConfig.backgroundColor = '#00FF00';
         menuConfig.color = '#FFFFFF';
@@ -44,24 +45,32 @@ class Menu extends Phaser.Scene {
     }
 
     update() {
+
         if (Phaser.Input.Keyboard.JustDown(keyLEFT)) {
             //easy mode
             game.settings = {
-                spaceshipSpeed: 3,
+                spaceshipSpeed: 4,
                 gameTimer: 60000
             }
+            this.sound.play('theme');
             this.sound.play('sfx_select');
             this.scene.start("playScene");
         }
             if (Phaser.Input.Keyboard.JustDown(keyRIGHT)) {
                 //hard mode
                 game.settings = {
-                    spaceshipSpeed: 4,
+                    spaceshipSpeed: 5,
                     gameTimer: 45000
                 }
+                this.sound.play('theme');
                 this.sound.play('sfx_select');
                 this.scene.start('playScene');
             }
+
+            
+        //this.sound.play('theme');
+        //this.scene.start('playScene');
+        
         }
     
 }

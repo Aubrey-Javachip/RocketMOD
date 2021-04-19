@@ -1,4 +1,9 @@
-//let game = new Phaser.Game();
+//Aubrey Schelbauer
+//Paper Patrol
+//4/18/21
+
+
+
 //game config
 let config = {
     type: Phaser.CANVAS,
@@ -15,4 +20,4 @@ let borderPadding = borderUISize / 3;
 let starSpeed = 4;
 
 //reserve keyboard bindings
-let keyF, keyR, keyE, keyLEFT, keyRIGHT
+let keyF, keyR, keyE, keyW, keyLEFT, keyRIGHT
