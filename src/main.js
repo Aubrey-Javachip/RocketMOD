@@ -1,9 +1,10 @@
 //Aubrey Schelbauer
 //Title: Rock, Paper, Scissors, Shoot!
 //4/18/21
-//Total Hours: 12
+//Total Hours: 12 hrs
 
 //POINT BREAKDOWN
+//TOTAL: 105 pts
 //Allow player to control the Rocket after it's fired - 5pts
 //Create a new spaceship type(w/new art) that's smaller, moves faster, and worth more points - 20pts
 //Create and implement a new weapon (w/ new behavior and graphics) - 20pts
