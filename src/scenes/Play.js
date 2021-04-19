@@ -39,6 +39,8 @@ class Play extends Phaser.Scene {
         this.ship03 = new Spaceship(this, game.config.width, borderUISize * 6 + borderPadding * 4, 'spaceship', 0, 10).setOrigin(0,0);
 
         this.fastship = new Fastship(this, borderUISize * 8, borderUISize * 5, 'faststar', 0, 50).setOrigin(0,0);
+        this.p1Weapon = new NewWeapon(this, game.config.width/2, game.config.height - borderUISize - borderPadding, 'paperplane').setOrigin(0.5,0.5);
+        //this.p1Weapon2 = new NewWeapon2(this, game.config.width/2, game.config.height - borderUISize - borderPadding, 'paperplane').setOrigin(4,0.5);
 
         //define keys
         keyF = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.F);
@@ -59,6 +61,7 @@ class Play extends Phaser.Scene {
         });
 
         //initialize score
+        this.weaponScore = 0;
         this.p1Score = 0;
         this.clock = 60;
 
@@ -75,7 +78,7 @@ class Play extends Phaser.Scene {
             },
             fixedWidth: 100
         }
-        this.scoreLeft = this.add.text(borderUISize + borderPadding, borderUISize + borderPadding*2, this.p1Score, scoreConfig);
+        this.scoreLeft = this.add.text(borderUISize + borderPadding, borderUISize + borderPadding*2, this.p1Score += this.weaponScore, scoreConfig);
 
 
         //Game over flag
@@ -127,6 +130,8 @@ class Play extends Phaser.Scene {
         if(!this.gameOver) {
         //update Rocket and ships
         this.p1Rocket.update();
+        this.p1Weapon.update();
+        //this.p1Weapon2.update();
         this.ship01.update();
         this.ship02.update();
         this.ship03.update();
@@ -155,8 +160,31 @@ class Play extends Phaser.Scene {
             this.shipExplode(this.ship01);
             //console.log('kaboom ship 01');
         }
+        if(this.checkCollision(this.p1Weapon, this.fastship)) {
+            this.p1Weapon.reset();
+            this.shipExplode(this.fastship);
+            //console.log('kaboom newship');
+        }
+
+        if(this.checkCollision(this.p1Weapon, this.ship03)) {
+            this.p1Weapon.reset();
+            this.shipExplode(this.ship03);
+            //console.log('kaboom ship 03');
+        }
+        if(this.checkCollision(this.p1Weapon, this.ship02)) {
+            this.p1Weapon.reset();
+            this.shipExplode(this.ship02);
+            //console.log('kaboom ship 02');
+        }
+        if(this.checkCollision(this.p1Weapon, this.ship01)) {
+            this.p1Weapon.reset();
+            this.shipExplode(this.ship01);
+            //console.log('kaboom ship 01');
+        }
+
     }
 
+    
     checkCollision(rocket, ship) {
         // simple AABB Check
         if(rocket.x < ship.x + ship.width && 
@@ -173,7 +201,7 @@ class Play extends Phaser.Scene {
         //temporary hide ship
         ship.alpha = 0;
         //create explosion at ship position
-        let boom = this.add.sprite(ship.x, ship.y, 'explosion').setOrigin(0,0);
+        let boom = this.add.sprite(ship.x, ship.y, 'explosion');//.setOrigin(0,0);
         boom.anims.play('explode');
         boom.on('animationcomplete', () => {
             ship.reset();
@@ -181,6 +209,8 @@ class Play extends Phaser.Scene {
             boom.destroy();
         });
         //score add and repaint
+        //this.newScore = this.p1score += this.weaponScore;
+        //this.newScore += ship.points;
         this.p1Score += ship.points;
         this.scoreLeft.text = this.p1Score;
 
