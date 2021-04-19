@@ -9,7 +9,7 @@ class Menu extends Phaser.Scene {
         this.load.audio('sfx_explosion', './assets/crumple.wav');
         this.load.audio('sfx_rocket', './assets/breeze.ogg');
         this.load.audio('theme','./assets/Theme.wav');
-        this.load.image('sky', './assets/sky.png');
+        this.load.image('menu', './assets/menu.png');
     }
     create () {
         //create menu
@@ -26,14 +26,10 @@ class Menu extends Phaser.Scene {
             fixedWidth: 0
         }
 
-        this.add.image(0,0,'sky').setOrigin(0,0); 
-        //menu text
-        this.add.text(game.config.width/2, game.config.height/2 - borderUISize - borderPadding, 'ROCK PAPER SCISSORS SHOOT!', menuConfig).setOrigin(0.5);
-        this.add.text(game.config.width/2, game.config.height/2, 'Use ←→ arrows to move & (F) to fire', menuConfig).setOrigin(0.5);
-        //menuConfig.backgroundColor = '#00FF00';
+        this.add.image(0,0,'menu').setOrigin(0,0); 
+        
         menuConfig.color = '#FFFFFF';
-        this.add.text(game.config.width/2, game.config.height/2 + borderUISize +
-        borderPadding, 'Press ← for Novice or → for Expert', menuConfig).setOrigin(0.5);
+      
 
         //menu keys
         keyLEFT = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.LEFT);
@@ -67,9 +63,6 @@ class Menu extends Phaser.Scene {
                 this.scene.start('playScene');
             }
 
-            
-        //this.sound.play('theme');
-        //this.scene.start('playScene');
         
         }
     

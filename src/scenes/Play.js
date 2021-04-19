@@ -11,7 +11,7 @@ class Play extends Phaser.Scene {
         this.load.image('Red', './assets/Redplane.png');
         this.load.image('Blue', './assets/Blueplane.png');
         this.load.image('Yellow', './assets/Yellplane.png');
-        this.load.image('faststar', './assets/faststarbg.png');
+        this.load.image('Crane', './assets/Crane.png');
         this.load.image('skytwo', './assets/skytwo.png');
         //load spritesheet
         this.load.spritesheet('explosion','./assets/shred.png', {
@@ -22,25 +22,43 @@ class Play extends Phaser.Scene {
         })
     } 
     create () {
+
+        let playConfig = {
+            fontFamily: 'Tahoma',
+            fontSize: '16px',
+            color: '#3c89d0',
+            align: 'right',
+            padding: {
+                top: 5,
+                bottom: 5,
+            },
+            fixedWidth: 0
+        }
+
+
         //place skysprite
         this.sky = this.add.tileSprite(0, 0, game.config.width, game.config.height,'skytwo').setOrigin(0,0);
 
-        //white borders
-        this.add.rectangle(0,0,game.config.width, borderUISize, 0xFFFFFF).setOrigin(0,0);
-        this.add.rectangle(0, game.config.height - borderUISize, game.config.width, borderUISize, 0xFFFFFF).setOrigin(0,0);
-        this.add.rectangle(0,0,borderUISize, game.config.height, 0xFFFFFF).setOrigin(0,0);
-        this.add.rectangle(game.config.width - borderUISize, 0, borderUISize, game.config.height, 0xFFFFFF).setOrigin(0,0);
+        //scene borders
+        this.add.rectangle(0,0,game.config.width, borderUISize, 0xFFD1DC).setOrigin(0,0);
+        this.add.rectangle(0, game.config.height - borderUISize, game.config.width, borderUISize, 0xFFD1DC).setOrigin(0,0);
+        this.add.rectangle(0,0,borderUISize, game.config.height, 0xFFD1DC).setOrigin(0,0);
+        this.add.rectangle(game.config.width - borderUISize, 0, borderUISize, game.config.height, 0xFFD1DC).setOrigin(0,0);
 
-        //add rocket (player 1)
-        this.p1Rocket = new Rocket(this, game.config.width/2,game.config.height - borderUISize - borderPadding, 'paperplane').setOrigin(0.5,0.5);
+        //add instructions
+        this.add.text(1,0, 'Use <- and -> to move  (Press W - Rock) (Press F - Paper) (Press E - Scissors)', playConfig).setOrigin(0,0);
+        //this.add.text('Use <- and -> to move  (Press W - Rock) (Press F - Paper) (Press E - Scissors)').setOrigin(0,0)
 
-        //add 3 spaceships
-        this.ship01 = new Spaceship(this, game.config.width + borderUISize * 6, borderUISize * 4, 'Red', 0, 30).setOrigin(0,0);
-        this.ship02 = new Spaceship(this, game.config.width + borderUISize * 3, borderUISize * 5 + borderPadding * 2, 'Blue', 0, 20).setOrigin(0,0);
-        this.ship03 = new Spaceship(this, game.config.width, borderUISize * 6 + borderPadding * 4, 'Yellow', 0, 10).setOrigin(0,0);
+        //add paper plane (player 1)
+        this.p1Rocket = new Plane(this, game.config.width/2,game.config.height - borderUISize - borderPadding, 'paperplane').setOrigin(0.5,0.5);
 
-        this.fastship = new Fastship(this, borderUISize * 8, borderUISize * 5, 'faststar', 0, 50).setOrigin(0,0);
-        this.p1Weapon = new NewWeapon(this, game.config.width/2, game.config.height - borderUISize - borderPadding, 'scissors').setOrigin(0.5,0.5);
+        //add 4 enemy planes
+        this.ship01 = new Enemyplane(this, game.config.width + borderUISize * 6, borderUISize * 4, 'Red', 0, 30).setOrigin(0,0);
+        this.ship02 = new Enemyplane(this, game.config.width + borderUISize * 3, borderUISize * 5 + borderPadding * 2, 'Blue', 0, 20).setOrigin(0,0);
+        this.ship03 = new Enemyplane(this, game.config.width, borderUISize * 6 + borderPadding * 4, 'Yellow', 0, 10).setOrigin(0,0);
+        this.fastship = new Fastcrane(this, borderUISize * 8, borderUISize * 5, 'Crane', 0, 50).setOrigin(0,0);
+        //add weapon types
+        this.p1Weapon = new Scissors(this, game.config.width/2, game.config.height - borderUISize - borderPadding, 'scissors').setOrigin(0.5,0.5);
         this.p1Weapon2 = new Rock(this, game.config.width/2, game.config.height - borderUISize - borderPadding, 'rock').setOrigin(0.5,0.5);
 
         //define keys
@@ -95,20 +113,6 @@ class Play extends Phaser.Scene {
         }, null, this);
         
         
-         //display time
-        // let timeConfig = {
-        //    fontFamily: 'Tahoma',
-        //    fontSize: '28px',
-            //backgroundColor: '#F3B141',
-        //    color: '#ffffff',
-        //    align: 'right',
-        //    padding: {
-        //        top: 20,
-        //        bottom: 20,
-        //    },
-        //    fixedWidth: 100
-        //}
-        //this.timeLeft = this.add.text(borderUISize + borderPadding, borderUISize + borderPadding*2, game.settings.gameTimer, timeConfig);
 
     }
 
@@ -130,7 +134,7 @@ class Play extends Phaser.Scene {
         //this.timeLeft.text = this.clock;
 
         if(!this.gameOver) {
-        //update Rocket and ships
+        //update planes and weapons
         this.p1Rocket.update();
         this.p1Weapon.update();
         this.p1Weapon2.update();
@@ -234,8 +238,6 @@ class Play extends Phaser.Scene {
             boom.destroy();
         });
         //score add and repaint
-        //this.newScore = this.p1score += this.weaponScore;
-        //this.newScore += ship.points;
         this.p1Score += ship.points;
         this.scoreLeft.text = this.p1Score;
 

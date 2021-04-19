@@ -1,5 +1,5 @@
-//Rocket (player) prefab
-class NewWeapon extends Phaser.GameObjects.Sprite {
+//Scissors weapon prefab
+class Scissors extends Phaser.GameObjects.Sprite {
     constructor(scene,x,y,texture,frame) {
         super(scene,x,y,texture,frame);
 
